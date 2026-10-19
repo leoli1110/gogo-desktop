@@ -598,7 +598,12 @@ mod tests {
 
     #[test]
     fn libraries_env() {
-        let libs = parse_libraries("Docs=/home/leo/Documents; Photos=/mnt/photos").unwrap();
+        let list = if cfg!(windows) {
+            r"Docs=C:\Users\leo\Documents; Photos=D:\Photos"
+        } else {
+            "Docs=/home/leo/Documents; Photos=/mnt/photos"
+        };
+        let libs = parse_libraries(list).unwrap();
         assert_eq!(libs.len(), 2);
         assert!(parse_libraries("Docs=relative/path").is_err());
         assert!(parse_libraries("NoEquals").is_err());

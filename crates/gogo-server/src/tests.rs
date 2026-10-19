@@ -252,13 +252,18 @@ async fn search_respects_library_permissions() {
     let r = t.post("/api/v1/libraries", json!({ "name": "Projects", "path": files.path().to_string_lossy(), "display_prefix": "\\\\NAS\\Projects" }), Some(&a)).await;
     assert_eq!(r.status, StatusCode::OK, "{:?}", r.json);
     let lib_id = r.json["library"]["id"].as_i64().unwrap();
-    for _ in 0..100 {
-        let st = t.get("/api/v1/status", Some(&a)).await;
-        if st.json["libraries"][0]["state"] == "watching" || st.json["libraries"][0]["state"] == "recheckonly" {
+    // Wait until the first full listing is done (on Windows the NTFS file table
+    // of the whole volume is read, which can take a while on CI runners).
+    let mut status = Value::Null;
+    for _ in 0..1200 {
+        status = t.get("/api/v1/status", Some(&a)).await.json;
+        let lib = &status["libraries"][0];
+        if lib["state"] == "watching" && lib["entries"].as_u64().unwrap_or(0) >= 3 {
             break;
         }
         tokio::time::sleep(std::time::Duration::from_millis(50)).await;
     }
+    println!("library status: {status}");
     let r = t.get("/api/v1/search?q=site%20plan", Some(&a)).await;
     assert_eq!(r.json["hits"][0]["name"], "site-plan-2026.dwg", "{:?}", r.json);
     assert_eq!(r.json["hits"][0]["path"], "\\\\NAS\\Projects\\plans\\site-plan-2026.dwg");
