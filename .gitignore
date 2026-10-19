@@ -1,0 +1,8 @@
+/target
+/web/node_modules
+/web/dist/*
+!/web/dist/.gitkeep
+/dev-data
+*.log
+.DS_Store
+/gogo-data

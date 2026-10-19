@@ -1,0 +1,36 @@
+# Gogo Desktop on a Synology NAS (Container Manager > Project) or any Docker host.
+# See docs/install-synology.md for the full walkthrough.
+name: gogo-desktop
+
+services:
+  gogo-desktop:
+    image: ghcr.io/leoli1110/gogo-desktop:latest
+    # build: { context: .., dockerfile: docker/Dockerfile }   # build locally instead
+    container_name: gogo-desktop
+    restart: unless-stopped
+    # Run as the dedicated DSM user "gogo" (find the IDs with `id gogo` over SSH).
+    user: "1030:100"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "4681:4681"          # HTTPS. Put DSM's reverse proxy in front for a nicer address.
+    environment:
+      GOGO_PUBLIC_URL: "https://nas.local:4681"
+      GOGO_ALLOWED_HOSTS: "nas,nas.local,192.168.1.10"
+      GOGO_PROFILE: "nas-small"         # nas-small (<= 4 GB RAM) or nas-large
+      GOGO_LOCAL_ACCOUNTS: "all"        # or admins_only once Synology sign-in arrives (M6)
+      TZ: "Europe/London"
+    volumes:
+      - /volume1/docker/gogo-desktop/data:/data
+      - /volume1/docker/gogo-desktop/config:/config:ro
+      # Each folder under /libraries becomes a library (read-only).
+      - /volume1/Projects:/libraries/Projects:ro
+      - /volume1/Documents:/libraries/Documents:ro
+    tmpfs:
+      - /tmp:size=64m
+    deploy:
+      resources:
+        limits:
+          memory: 1g

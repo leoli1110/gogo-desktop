@@ -1,0 +1,27 @@
+[package]
+name = "gogo-discovery"
+description = "File discovery and change tracking for Gogo Desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+gogo-index = { path = "../gogo-index" }
+parking_lot.workspace = true
+serde.workspace = true
+tracing.workspace = true
+walkdir = "2"
+notify = { version = "6.1", default-features = false, features = ["macos_kqueue"] }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+  "Win32_Foundation",
+  "Win32_Storage_FileSystem",
+  "Win32_System_IO",
+  "Win32_System_Ioctl",
+  "Win32_Security",
+] }
+
+[dev-dependencies]
+tempfile = "3"

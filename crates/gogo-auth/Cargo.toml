@@ -1,0 +1,26 @@
+[package]
+name = "gogo-auth"
+description = "Accounts, sessions, permissions and audit log for Gogo Desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+parking_lot.workspace = true
+rusqlite = { version = "0.32", features = ["bundled"] }
+argon2 = { version = "0.5", features = ["std"] }
+rand = "0.8"
+sha2 = "0.10"
+sha1 = "0.10"
+hmac = "0.12"
+hex = "0.4"
+data-encoding = "2"
+subtle = "2"
+
+[dev-dependencies]
+tempfile = "3"
