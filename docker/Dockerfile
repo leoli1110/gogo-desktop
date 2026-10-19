@@ -36,8 +36,8 @@ WORKDIR /src
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
 COPY --from=web /src/web/dist ./web/dist
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/src/target,id=gogo-target-${TARGETARCH} \
+RUN --mount=type=cache,target=/usr/local/cargo/registry,id=gogo-cargo-registry,sharing=locked \
+    --mount=type=cache,target=/src/target,id=gogo-target-${TARGETARCH},sharing=locked \
     set -eux; \
     case "$TARGETARCH" in \
       arm64) triple=aarch64-unknown-linux-gnu ;; \

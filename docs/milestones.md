@@ -32,8 +32,8 @@ The plan follows section 14 of the [specification](specification.md).
 |---|---|---|
 | Name search, 1M entries | interactive | 18-32 ms per query, about 38 ms with wildcards (release build, 2-CPU Linux sandbox) |
 | Rename visible (Linux, inotify) | < 1 s | 0.3 s in the browser end-to-end test |
-| Rename visible (Windows, change journal) | < 1 s | checked by the `ntfs_journal` CI test |
-| 1M files listed on Windows | < 10 s | not yet measured on a real 1M-file volume; CI prints the listing time for the runner's volume |
+| Rename visible (Windows, change journal) | < 1 s | 20 ms in the `ntfs_journal` test on the GitHub `windows-latest` runner |
+| 1M files listed on Windows | < 10 s | 5.2 s to read the CI runner's whole C: file table (file count of that volume not yet recorded); still to measure on a PC with a known 1M+ files |
 | Security tests (spec section 16) | pass | the M1 subset passes (see [security.md](security.md)) |
 
 ### Still to do for M1
