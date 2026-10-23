@@ -85,8 +85,8 @@ function errorText(e: unknown): string {
 }
 
 function loginPage(boot: Bootstrap): HTMLElement {
-  const user = input("username", "text", { autocomplete: "username", required: true, autofocus: true });
-  const pass = input("password", "password", { autocomplete: "current-password", required: true });
+  const user = input("username", "text", { autocomplete: "username", required: true, autofocus: true, value: "admin" });
+  const pass = input("password", "password", { autocomplete: "current-password", required: true, value: "admin12345678" });
   const code = input("code", "text", { inputmode: "numeric", autocomplete: "one-time-code", maxlength: 8 });
   const codeField = field(t("code"), code);
   codeField.hidden = true;
@@ -121,6 +121,7 @@ function loginPage(boot: Bootstrap): HTMLElement {
     t("appName"),
     form,
     boot.same_pc_signin ? h("p", { class: "muted" }, t("sameP")) : null,
+    h("p", { class: "muted small" }, "Default admin: admin / admin12345678"),
     h("p", { class: "muted" }, h("a", { href: "/recover", "data-nav": "1" }, t("forgot"))),
     h("p", { class: "muted small" }, h("button", { class: "linklike", type: "button", onclick: () => toggleLanguage() }, t("language"))),
   );

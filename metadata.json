@@ -1,0 +1,6 @@
+{
+  "name": "Gogo Desktop",
+  "description": "Fast desktop file search in your web browser with libraries, filters, and admin controls.",
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
